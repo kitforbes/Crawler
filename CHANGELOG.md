@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Add `HtmlAgilityPack` for HTML parsing
 - Add solution file to project
 - Add Circle CI build status badge to README
 - Add Circle CI support
