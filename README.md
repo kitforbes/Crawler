@@ -2,7 +2,23 @@
 
 [![CircleCI](https://circleci.com/gh/kitforbes/Crawler/tree/master.svg?style=svg)](https://circleci.com/gh/kitforbes/Crawler/tree/master)
 
-A simple web crawler.
+A simple web crawler to construct a sitemap-like JSON string.
+
+## Overview
+
+This project will start from a single domain (currently hard coded to https://chris-forbes.com), and find all internal links, external links and images on the page before continuing to one of the internal links. It currently treats sub-domains as external links.
+
+Asynchronous behaviour was disabled, as this resulted in an inconsistent number of visited pages on subsequent tests. Identifying the reason for this could help improve performance and execution time of the application.
+
+An actual test project has not yet been created due to time constraints. The primary method for testing is the traditional "does it compile?" approach by running the application through a continuous integration system ([CircleCI](https://circleci.com/)).
+
+Given additional time, I would:
+- add unit tests with an `xUnit` project.
+- add support for URL specification over the command line.
+- add support for subdomains over the command line.
+- replace the `if/else` statements for URL interpretation with a `switch` statment, relying on regular expressions.
+- add a build script for Linux/Mac.
+- add a `Vagrantfile` to describe an appropriate development environment.
 
 ## Usage
 
@@ -23,11 +39,3 @@ dotnet run --rm crawler --project ./Crawler
 
 * DotNet Core SDK v2.2+
 * Docker v18+
-
-## TODO
-
-* Add a class library to hold classes and functions to extract out of the console application
-* Add `xUnit` test project to test the class library
-* Add `build.sh` for Linux/Mac development
-* Add `Vagrantfile` to create a development instance containing development dependencies
-* Add CLI options to control the URL being crawled and whether or not to include sub domains
