@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using HtmlAgilityPack;
+using Newtonsoft.Json;
 
 namespace Crawler
 {
@@ -23,6 +24,9 @@ namespace Crawler
 
                 _pages.Add(_url);
                 StartCrawler(_url);
+
+                string json = JsonConvert.SerializeObject(_dictionary.Values, Formatting.Indented);
+                Console.WriteLine(json);
 
                 var output = $@"Crawler Summary:
 - Internal Pages : {_pages.Count}
