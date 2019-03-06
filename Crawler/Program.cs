@@ -22,9 +22,11 @@ namespace Crawler
                 _visitedPages = new List<string>();
                 _dictionary = new Dictionary<string, IPage>();
 
+                // Recursivly build a dictionary of pages.
                 _pages.Add(_url);
                 StartCrawler(_url);
 
+                // Display the pages as a JSON string.
                 string json = JsonConvert.SerializeObject(_dictionary.Values, Formatting.Indented);
                 Console.WriteLine(json);
 
@@ -39,6 +41,7 @@ namespace Crawler
 
         public static void StartCrawler(string url)
         {
+            // Try to avoid processing the same page.
             if (_visitedPages.Contains(url))
             {
                 return;
@@ -51,6 +54,8 @@ namespace Crawler
             };
 
             var source = GetPageSource(url);
+
+            // Find all image source URLs on the page.
             foreach (var value in GetAttributeValue(source, "img", "src"))
             {
                 if (!page.Images.Contains(value))
@@ -59,6 +64,7 @@ namespace Crawler
                 }
             }
 
+            // Find all link URLs on the page.
             foreach (var value in GetAttributeValue(source, "a", "href"))
             {
                 if (value == url || value == _url || value.StartsWith('#') || string.IsNullOrWhiteSpace(value))
@@ -67,6 +73,7 @@ namespace Crawler
                 }
                 else if (value.StartsWith(_url))
                 {
+                    // Obvious internal URL.
                     if (!page.InternalLinks.Contains(value))
                     {
                         page.InternalLinks.Add(value);
@@ -74,6 +81,7 @@ namespace Crawler
                 }
                 else if (value.StartsWith('/'))
                 {
+                    // Likely a relative link to an internal URL.
                     var absoluteUrl = _url + value;
                     if (absoluteUrl != url || !page.InternalLinks.Contains(value))
                     {
@@ -82,6 +90,7 @@ namespace Crawler
                 }
                 else
                 {
+                    // Anything else is probably external. Just make sure that it is http or https.
                     if (value.StartsWith("http") && !page.ExternalLinks.Contains(value))
                     {
                         page.ExternalLinks.Add(value);
@@ -108,6 +117,7 @@ namespace Crawler
                 var response = client.GetAsync(url).Result;
                 if (response.IsSuccessStatusCode)
                 {
+                    // Ensure the result is returned synchronously.
                     return response.Content.ReadAsStringAsync().Result;
                 }
 
@@ -121,10 +131,12 @@ namespace Crawler
             {
                 var document = new HtmlDocument();
                 document.LoadHtml(htmlSource);
+                // Find desired element/attribute through a CSS selector.
                 return document.DocumentNode.SelectNodes($"//{element}[@{attribute}]").Select(node => node.Attributes[attribute].Value).ToList();
             }
             catch (Exception)
             {
+                // If something breaks, just return an empty list.
                 return new List<string>();
             }
         }
