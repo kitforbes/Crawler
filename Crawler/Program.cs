@@ -57,6 +57,14 @@ namespace Crawler
             };
 
             var source = GetPageSource(url);
+            foreach (var value in GetAttributeValue(source, "img", "src"))
+            {
+                if (!page.Images.Contains(value))
+                {
+                    page.Images.Add(value);
+                }
+            }
+
             foreach (var value in GetAttributeValue(source, "a", "href"))
             {
                 if (value == url || value == _url || value.StartsWith('#') || string.IsNullOrWhiteSpace(value))

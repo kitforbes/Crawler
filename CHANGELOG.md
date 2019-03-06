@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Capture image source URLs from pages
 - Add `NewtonSoft.JSON` to serialize page data
 - Add Page class to hold page data
 - Add recursive function to traverse pages
