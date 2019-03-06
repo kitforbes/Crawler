@@ -11,7 +11,7 @@ namespace Crawler
         private static string _url = "https://chris-forbes.com";
         private static IList<string> _pages;
         private static IList<string> _visitedPages;
-        private static IList<string> _externalPages;
+        private static IDictionary<string, IPage> _dictionary;
 
         static int Main(string[] args)
         {
@@ -19,7 +19,7 @@ namespace Crawler
             {
                 _pages = new List<string>();
                 _visitedPages = new List<string>();
-                _externalPages = new List<string>();
+                _dictionary = new Dictionary<string, IPage>();
 
                 _pages.Add(_url);
                 StartCrawler(_url);
@@ -27,7 +27,6 @@ namespace Crawler
                 var output = $@"Crawler Summary:
 - Internal Pages : {_pages.Count}
 - Visited Pages  : {_visitedPages.Count}
-- External Pages : {_externalPages.Count}
 ";
 
                 Console.WriteLine(output);
@@ -48,8 +47,11 @@ namespace Crawler
             }
 
             _visitedPages.Add(url);
+            var page = new Page
+            {
+                Url = new Uri(url)
+            };
 
-            var internalLinks = new List<string>();
             var source = GetPageSource(url);
             foreach (var value in GetAttributeValue(source, "a", "href"))
             {
@@ -59,29 +61,30 @@ namespace Crawler
                 }
                 else if (value.StartsWith(_url))
                 {
-                    if (!internalLinks.Contains(value))
+                    if (!page.InternalLinks.Contains(value))
                     {
-                        internalLinks.Add(value);
+                        page.InternalLinks.Add(value);
                     }
                 }
                 else if (value.StartsWith('/'))
                 {
                     var absoluteUrl = _url + value;
-                    if (absoluteUrl != url || !internalLinks.Contains(value))
+                    if (absoluteUrl != url || !page.InternalLinks.Contains(value))
                     {
-                        internalLinks.Add(absoluteUrl);
+                        page.InternalLinks.Add(absoluteUrl);
                     }
                 }
                 else
                 {
-                    if (value.StartsWith("http") && !_externalPages.Contains(value))
+                    if (value.StartsWith("http") && !page.ExternalLinks.Contains(value))
                     {
-                        _externalPages.Add(value);
+                        page.ExternalLinks.Add(value);
                     }
                 }
             }
 
-            foreach (var link in internalLinks)
+            _dictionary.Add(url, page);
+            foreach (var link in page.InternalLinks)
             {
                 if (!_visitedPages.Contains(link))
                 {

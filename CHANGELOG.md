@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Add Page class to hold page data
 - Add recursive function to traverse pages
 - Add `HtmlAgilityPack` for HTML parsing
 - Add solution file to project
