@@ -9,13 +9,85 @@ namespace Crawler
     class Program
     {
         private static string _url = "https://chris-forbes.com";
+        private static IList<string> _pages;
+        private static IList<string> _visitedPages;
+        private static IList<string> _externalPages;
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            var source = GetPageSource(_url);
+            try
+            {
+                _pages = new List<string>();
+                _visitedPages = new List<string>();
+                _externalPages = new List<string>();
+
+                _pages.Add(_url);
+                StartCrawler(_url);
+
+                var output = $@"Crawler Summary:
+- Internal Pages : {_pages.Count}
+- Visited Pages  : {_visitedPages.Count}
+- External Pages : {_externalPages.Count}
+";
+
+                Console.WriteLine(output);
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 1;
+            }
+        }
+
+        public static void StartCrawler(string url)
+        {
+            if (_visitedPages.Contains(url))
+            {
+                return;
+            }
+
+            _visitedPages.Add(url);
+
+            var internalLinks = new List<string>();
+            var source = GetPageSource(url);
             foreach (var value in GetAttributeValue(source, "a", "href"))
             {
-                Console.WriteLine(value);
+                if (value == url || value == _url || value.StartsWith('#') || string.IsNullOrWhiteSpace(value))
+                {
+                    continue;
+                }
+                else if (value.StartsWith(_url))
+                {
+                    if (!internalLinks.Contains(value))
+                    {
+                        internalLinks.Add(value);
+                    }
+                }
+                else if (value.StartsWith('/'))
+                {
+                    var absoluteUrl = _url + value;
+                    if (absoluteUrl != url || !internalLinks.Contains(value))
+                    {
+                        internalLinks.Add(absoluteUrl);
+                    }
+                }
+                else
+                {
+                    if (value.StartsWith("http") && !_externalPages.Contains(value))
+                    {
+                        _externalPages.Add(value);
+                    }
+                }
+            }
+
+            foreach (var link in internalLinks)
+            {
+                if (!_visitedPages.Contains(link))
+                {
+                    _pages.Add(link);
+                    StartCrawler(link);
+                }
             }
         }
 
