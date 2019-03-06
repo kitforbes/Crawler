@@ -28,12 +28,6 @@ namespace Crawler
                 string json = JsonConvert.SerializeObject(_dictionary.Values, Formatting.Indented);
                 Console.WriteLine(json);
 
-                var output = $@"Crawler Summary:
-- Internal Pages : {_pages.Count}
-- Visited Pages  : {_visitedPages.Count}
-";
-
-                Console.WriteLine(output);
                 return 0;
             }
             catch (Exception ex)
@@ -95,6 +89,7 @@ namespace Crawler
                 }
             }
 
+            page.OrderLists();
             _dictionary.Add(url, page);
             foreach (var link in page.InternalLinks)
             {

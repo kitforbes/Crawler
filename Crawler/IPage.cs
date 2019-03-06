@@ -9,5 +9,6 @@ namespace Crawler
         IList<string> Images { get; set; }
         IList<string> InternalLinks { get; set; }
         IList<string> ExternalLinks { get; set; }
+        void OrderLists();
     }
 }

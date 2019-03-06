@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Add function to de-duplicate and order lists within pages
 - Capture image source URLs from pages
 - Add `NewtonSoft.JSON` to serialize page data
 - Add Page class to hold page data
