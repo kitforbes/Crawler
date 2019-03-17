@@ -10,4 +10,4 @@ jobs:
       - run: docker build -t crawler ./Crawler
 
       # Run the image
-      - run: docker run --rm crawler --project ./Crawler
+      - run: docker run --rm crawler
