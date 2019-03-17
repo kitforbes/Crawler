@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Fix build script
+
 ## [v0.1.0] (2019-03-06)
 
 - Add function to de-duplicate and order lists within pages
