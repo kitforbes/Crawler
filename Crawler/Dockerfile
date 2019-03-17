@@ -1,11 +1,11 @@
-FROM microsoft/dotnet:2.2-sdk
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2-alpine
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
 COPY *.csproj ./
-RUN dotnet restore
+RUN dotnet restore /nologo
 
 # Copy and build everything else
 COPY . ./
-RUN dotnet publish -c Release -o out
+RUN dotnet publish -c Release -o out /nologo
 ENTRYPOINT ["dotnet", "out/Crawler.dll"]

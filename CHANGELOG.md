@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Update `Dockerfile` to use Microsoft Container Registry
 - Fix build script
 
 ## [v0.1.0] (2019-03-06)
