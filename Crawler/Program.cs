@@ -16,6 +16,18 @@ namespace Crawler
 
         static int Main(string[] args)
         {
+            if (args.Count() > 0 && !string.IsNullOrWhiteSpace(args[0]))
+            {
+                if (!args[0].StartsWith("https://"))
+                {
+                    throw new ArgumentException("Please use HTTPS.");
+                }
+                else
+                {
+                    _url = args[0];
+                }
+            }
+
             try
             {
                 _pages = new List<string>();

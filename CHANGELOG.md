@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Allow URLs to be provided over the CLI
 - Update `Dockerfile` to use Microsoft Container Registry
 - Fix build script
 

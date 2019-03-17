@@ -14,7 +14,7 @@ An actual test project has not yet been created due to time constraints. The pri
 
 Given additional time, I would:
 - add unit tests with an `xUnit` project.
-- add support for URL specification over the command line.
+- ~~add support for URL specification over the command line.~~
 - add support for subdomains over the command line.
 - replace the `if/else` statements for URL interpretation with a `switch` statment, relying on regular expressions.
 - add a build script for Linux/Mac.
